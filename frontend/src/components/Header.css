@@ -1,0 +1,20 @@
+.header {
+  background: #f8f9fa;
+  color: #495057;
+  padding: 25px 20px;
+  text-align: center;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.header h1 {
+  font-size: 1.75rem;
+  margin-bottom: 8px;
+  color: #343a40;
+}
+
+.header p {
+  font-size: 0.95rem;
+  color: #6c757d;
+  max-width: 600px;
+  margin: 0 auto;
+}
