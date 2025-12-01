@@ -19,7 +19,7 @@ The application will simulate and visualize random processes, allowing users to 
 - **State Management**: Redux or Context API will be employed for managing application state.
 - **Build Tools**: Provide a ready-to-use containerized environment using Docker for easy deployment and testing.
 - **Testing**: Implement unit and integration tests using Jest and React Testing Library to ensure reliability. Make the tests run during the build process to catch issues early.
-- **Maintainability**: Code will be modular and well-documented to facilitate future enhancements and maintenance. Create abstractions where necessary to allow easy addition of new random processes in the future.
+- **Maintainability**: Code will be modular and well-documented to facilitate future enhancements and maintenance. Create abstractions where necessary to allow easy addition of new random processes in the future. Split the code into small, manageable components and modules, especially for the process simulations and visualizations.
 
 ## User Interface
 The UI will consist of the following components:
@@ -30,5 +30,12 @@ The UI will consist of the following components:
   - more vibrant colors to highlight the visualizations.
   - convergence plot and total trials label should NOT stick out too much.
   - make sure that colors in the probability distribution matches with the labels.
-  - make sure that colors in the convergence graph does NOT interfer with the probability distribution colors.
+  - make sure that colors in the convergence graph does NOT interfere with the probability distribution colors.
 - **Footer**: Additional information and links.
+
+## Visualization Details
+- **Probability Charts**:
+  - Display the frequency distribution of outcomes as a bar chart for all random processes.
+  - Make sure to bin the data appropriately for clarity and accuracy. Apply different binning strategies based on the process type, number of trials, observed range of outcomes.
+- **Line Charts**: Show the convergence of sample means or other statistics over the number of trials.
+- **Statistical Summaries**: Display key statistics such as mean and standard deviation alongside the visualizations.

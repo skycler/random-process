@@ -46,7 +46,7 @@ const ParameterControls: React.FC<ParameterControlsProps> = ({
             id="dice-count"
             type="range"
             min="2"
-            max="20"
+            max={20}
             value={numberOfDice}
             onChange={(e) => onNumberOfDiceChange(parseInt(e.target.value))}
           />
