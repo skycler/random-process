@@ -60,7 +60,7 @@ function App() {
 
   return (
     <div className="app">
-      <Header />
+      <Header processType={processType} />
       <main className="main-content">
         <div className="controls-section">
           <ProcessSelector 

@@ -9,9 +9,11 @@ jest.mock('react-chartjs-2', () => ({
 }));
 
 describe('App Component', () => {
-  test('renders header with title', () => {
+  test('renders header with title and illustration', () => {
     render(<App />);
     expect(screen.getByText('Random Process Illustration')).toBeInTheDocument();
+    // Header should show process-specific illustration
+    expect(screen.getByText('🪙')).toBeInTheDocument();
   });
 
   test('renders process selector', () => {

@@ -2,8 +2,35 @@
   background: #f8f9fa;
   color: #495057;
   padding: 25px 20px;
-  text-align: center;
   border-bottom: 1px solid #e9ecef;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.header-illustration {
+  font-size: 3rem;
+  animation: bounce 2s ease-in-out infinite;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.header-text {
+  text-align: left;
 }
 
 .header h1 {
@@ -15,6 +42,35 @@
 .header p {
   font-size: 0.95rem;
   color: #6c757d;
-  max-width: 600px;
-  margin: 0 auto;
+  margin: 0;
+}
+
+.header-subtitle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.process-highlight {
+  background: linear-gradient(135deg, #00c9ff 0%, #92fe9d 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 600;
+}
+
+@media (max-width: 600px) {
+  .header-content {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .header-text {
+    text-align: center;
+  }
+  
+  .header-illustration {
+    font-size: 2.5rem;
+  }
 }
