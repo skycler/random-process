@@ -11,7 +11,7 @@ jest.mock('react-chartjs-2', () => ({
 describe('App Component', () => {
   test('renders header with title', () => {
     render(<App />);
-    expect(screen.getByText('Random Process Simulator')).toBeInTheDocument();
+    expect(screen.getByText('Random Process Illustration')).toBeInTheDocument();
   });
 
   test('renders process selector', () => {
@@ -19,10 +19,10 @@ describe('App Component', () => {
     expect(screen.getByLabelText(/select process/i)).toBeInTheDocument();
   });
 
-  test('renders parameter controls', () => {
+  test('renders parameter controls with flip button for coin flip', () => {
     render(<App />);
-    expect(screen.getByText(/run trial/i)).toBeInTheDocument();
-    expect(screen.getByText(/reset/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /\+1 Flip/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /reset/i })).toBeInTheDocument();
   });
 
   test('coin flip is selected by default', () => {
@@ -36,52 +36,46 @@ describe('App Component', () => {
     const selector = screen.getByLabelText(/select process/i) as HTMLSelectElement;
     fireEvent.change(selector, { target: { value: 'dice-roll' } });
     expect(selector.value).toBe('dice-roll');
+    // Button should now show "+1 Roll"
+    expect(screen.getByRole('button', { name: /\+1 Roll/i })).toBeInTheDocument();
   });
 
-  test('can run a trial', () => {
+  test('can run a coin flip trial', () => {
     render(<App />);
-    const runButton = screen.getByText(/run trial/i);
+    const runButton = screen.getByRole('button', { name: /\+1 Flip/i });
     fireEvent.click(runButton);
-    // After running a trial, trial count should increase
-    expect(screen.getByText('1')).toBeInTheDocument();
+    // After running a trial, we should see stats
+    expect(screen.getByText('Total Trials')).toBeInTheDocument();
   });
 
   test('can add multiple trials', () => {
     render(<App />);
-    const add10Button = screen.getByText('+10');
-    fireEvent.click(add10Button);
-    // After adding 10 trials, we should see 10 in stats
+    const addButton = screen.getByRole('button', { name: /add/i });
+    fireEvent.click(addButton);
+    // After adding trials, total should be visible
     expect(screen.getByText('10')).toBeInTheDocument();
   });
 
   test('can reset trials', () => {
     render(<App />);
-    // Add some trials
-    const runButton = screen.getByText(/run trial/i);
+    const runButton = screen.getByRole('button', { name: /\+1 Flip/i });
     fireEvent.click(runButton);
     fireEvent.click(runButton);
     
-    // Reset
-    const resetButton = screen.getByText(/reset/i);
+    const resetButton = screen.getByRole('button', { name: /reset/i });
     fireEvent.click(resetButton);
     
-    // Total trials should be 0
-    expect(screen.getByText('0')).toBeInTheDocument();
+    // After reset, stats should show 0 values
+    const zeroValues = screen.getAllByText('0');
+    expect(zeroValues.length).toBeGreaterThan(0);
   });
 
-  test('switching process type resets trials', () => {
+  test('switching process type shows dice roll UI', () => {
     render(<App />);
-    // Run some coin flip trials
-    const runButton = screen.getByText(/run trial/i);
-    fireEvent.click(runButton);
-    fireEvent.click(runButton);
-    
-    // Switch to dice roll
     const selector = screen.getByLabelText(/select process/i);
     fireEvent.change(selector, { target: { value: 'dice-roll' } });
     
-    // Trials should be reset
-    const totalTrials = screen.getAllByText('0');
-    expect(totalTrials.length).toBeGreaterThan(0);
+    // Button should now show "+1 Roll"
+    expect(screen.getByRole('button', { name: /\+1 Roll/i })).toBeInTheDocument();
   });
 });

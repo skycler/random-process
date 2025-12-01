@@ -28,18 +28,22 @@ ChartJS.register(
 interface VisualizationAreaProps {
   trials: TrialResult[];
   processType: string;
+  numberOfDice?: number;
 }
 
 const DICE_COLORS = ['#00c9ff', '#f5576c', '#92fe9d', '#f093fb', '#4facfe', '#ffd166'];
 const DICE_BORDER_COLORS = ['#00b4e6', '#e04558', '#7ee089', '#d87ee0', '#3d9ae0', '#e6bc5a'];
 
-const VisualizationArea: React.FC<VisualizationAreaProps> = ({ trials, processType }) => {
+const VisualizationArea: React.FC<VisualizationAreaProps> = ({ trials, processType, numberOfDice = 5 }) => {
   // Filter trials by process type
   const coinTrials = useMemo(() => 
     trials.filter((t) => t.processId === 'coin-flip'), [trials]);
   
   const diceTrials = useMemo(() => 
     trials.filter((t) => t.processId === 'dice-roll'), [trials]);
+
+  const sumDiceTrials = useMemo(() => 
+    trials.filter((t) => t.processId === 'sum-dice'), [trials]);
 
   // Coin flip stats
   const coinStats = useMemo(() => {
@@ -62,6 +66,45 @@ const VisualizationArea: React.FC<VisualizationAreaProps> = ({ trials, processTy
     const percentages = counts.map((c) => (total > 0 ? ((c / total) * 100).toFixed(1) : '0'));
     return { counts, total, percentages };
   }, [diceTrials]);
+
+  // Sum of dice stats
+  const sumDiceStats = useMemo(() => {
+    const minSum = numberOfDice;
+    const maxSum = numberOfDice * 6;
+    const counts: number[] = new Array(maxSum - minSum + 1).fill(0);
+    
+    sumDiceTrials.forEach((t) => {
+      const value = t.result as number;
+      counts[value - minSum]++;
+    });
+    
+    const total = sumDiceTrials.length;
+    let sum = 0;
+    sumDiceTrials.forEach((t) => {
+      sum += t.result as number;
+    });
+    const average = total > 0 ? sum / total : 0;
+    const expectedValue = numberOfDice * 3.5;
+    
+    // Calculate standard deviation
+    let variance = 0;
+    sumDiceTrials.forEach((t) => {
+      variance += Math.pow((t.result as number) - average, 2);
+    });
+    const stdDev = total > 1 ? Math.sqrt(variance / (total - 1)) : 0;
+    const expectedStdDev = Math.sqrt((numberOfDice * 35) / 12);
+    
+    return { 
+      counts, 
+      total, 
+      minSum, 
+      maxSum, 
+      average: average.toFixed(2),
+      expectedValue: expectedValue.toFixed(1),
+      stdDev: stdDev.toFixed(2),
+      expectedStdDev: expectedStdDev.toFixed(2),
+    };
+  }, [sumDiceTrials, numberOfDice]);
 
   // Coin histogram data
   const coinHistogramData = {
@@ -109,6 +152,47 @@ const VisualizationArea: React.FC<VisualizationAreaProps> = ({ trials, processTy
     });
   }, [diceTrials]);
 
+  // Sum dice convergence data (average converging to N * 3.5)
+  const sumDiceCumulativeData = useMemo(() => {
+    let sum = 0;
+    return sumDiceTrials.map((trial, index) => {
+      sum += trial.result as number;
+      return sum / (index + 1);
+    });
+  }, [sumDiceTrials]);
+
+  // Sum dice histogram data with normal curve overlay
+  const sumDiceHistogramData = useMemo(() => {
+    const labels = [];
+    for (let i = sumDiceStats.minSum; i <= sumDiceStats.maxSum; i++) {
+      labels.push(i.toString());
+    }
+    
+    // Generate gradient colors
+    const colors = sumDiceStats.counts.map((_, index) => {
+      const hue = 200 + (index / sumDiceStats.counts.length) * 120;
+      return `hsl(${hue}, 70%, 60%)`;
+    });
+    
+    const borderColors = sumDiceStats.counts.map((_, index) => {
+      const hue = 200 + (index / sumDiceStats.counts.length) * 120;
+      return `hsl(${hue}, 70%, 50%)`;
+    });
+
+    return {
+      labels,
+      datasets: [
+        {
+          label: 'Count',
+          data: sumDiceStats.counts,
+          backgroundColor: colors,
+          borderColor: borderColors,
+          borderWidth: 1,
+        },
+      ],
+    };
+  }, [sumDiceStats]);
+
   const coinLineChartData = {
     labels: coinTrials.map((_, i) => i + 1),
     datasets: [
@@ -145,6 +229,28 @@ const VisualizationArea: React.FC<VisualizationAreaProps> = ({ trials, processTy
       {
         label: 'Expected (3.5)',
         data: diceCumulativeData.map(() => 3.5),
+        borderColor: '#6b7280',
+        borderDash: [5, 5],
+        fill: false,
+        pointRadius: 0,
+      },
+    ],
+  };
+
+  const sumDiceLineChartData = {
+    labels: sumDiceTrials.map((_, i) => i + 1),
+    datasets: [
+      {
+        label: 'Average Sum',
+        data: sumDiceCumulativeData,
+        borderColor: '#8b5cf6',
+        backgroundColor: 'rgba(139, 92, 246, 0.15)',
+        fill: true,
+        tension: 0.1,
+      },
+      {
+        label: `Expected (${(numberOfDice * 3.5).toFixed(1)})`,
+        data: sumDiceCumulativeData.map(() => numberOfDice * 3.5),
         borderColor: '#6b7280',
         borderDash: [5, 5],
         fill: false,
@@ -200,7 +306,44 @@ const VisualizationArea: React.FC<VisualizationAreaProps> = ({ trials, processTy
     },
   };
 
-  const relevantTrials = processType === 'coin-flip' ? coinTrials : diceTrials;
+  const sumDiceLineChartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      y: {
+        min: numberOfDice,
+        max: numberOfDice * 6,
+        title: { display: true, text: 'Average Sum' },
+      },
+      x: {
+        title: { display: true, text: 'Trial Number' },
+      },
+    },
+    plugins: {
+      legend: { position: 'top' as const },
+      title: { display: true, text: 'Convergence to Expected Average' },
+    },
+  };
+
+  const sumDiceHistogramOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      title: { display: true, text: `Distribution of Sums (${numberOfDice} dice) - Approaches Normal Distribution` },
+    },
+    scales: {
+      x: {
+        title: { display: true, text: 'Sum Value' },
+      },
+      y: {
+        title: { display: true, text: 'Frequency' },
+      },
+    },
+  };
+
+  const relevantTrials = processType === 'coin-flip' ? coinTrials : 
+                         processType === 'dice-roll' ? diceTrials : sumDiceTrials;
 
   return (
     <div className="visualization-area">
@@ -232,7 +375,7 @@ const VisualizationArea: React.FC<VisualizationAreaProps> = ({ trials, processTy
             )}
           </div>
         </>
-      ) : (
+      ) : processType === 'dice-roll' ? (
         <>
           <div className="stats-summary dice-stats">
             {diceStats.counts.map((count, index) => (
@@ -261,7 +404,46 @@ const VisualizationArea: React.FC<VisualizationAreaProps> = ({ trials, processTy
             )}
           </div>
         </>
-      )}
+      ) : processType === 'sum-dice' ? (
+        <>
+          <div className="stats-summary sum-dice-stats">
+            <div className="stat-card">
+              <span className="stat-value">{sumDiceStats.total}</span>
+              <span className="stat-label">Total Rolls</span>
+            </div>
+            <div className="stat-card">
+              <span className="stat-value">{sumDiceStats.average}</span>
+              <span className="stat-label">Avg Sum (exp: {sumDiceStats.expectedValue})</span>
+            </div>
+            <div className="stat-card">
+              <span className="stat-value">{sumDiceStats.stdDev}</span>
+              <span className="stat-label">Std Dev (exp: {sumDiceStats.expectedStdDev})</span>
+            </div>
+            <div className="stat-card info-card">
+              <span className="stat-label">🎲 {numberOfDice} dice</span>
+              <span className="stat-label">Range: {sumDiceStats.minSum} - {sumDiceStats.maxSum}</span>
+            </div>
+          </div>
+
+          <div className="clt-info">
+            <p>
+              <strong>Central Limit Theorem:</strong> As you add more trials, the histogram approaches a 
+              <em> normal (bell curve) distribution</em>. Try increasing the number of dice to see a smoother curve!
+            </p>
+          </div>
+
+          <div className="charts-container">
+            <div className="chart-wrapper chart-large">
+              <Bar data={sumDiceHistogramData} options={sumDiceHistogramOptions} />
+            </div>
+            {sumDiceStats.total > 0 && (
+              <div className="chart-wrapper">
+                <Line data={sumDiceLineChartData} options={sumDiceLineChartOptions} />
+              </div>
+            )}
+          </div>
+        </>
+      ) : null}
 
       {relevantTrials.length > 0 && (
         <div className="recent-trials">
@@ -270,11 +452,20 @@ const VisualizationArea: React.FC<VisualizationAreaProps> = ({ trials, processTy
             {relevantTrials.slice(-20).reverse().map((trial) => (
               <span
                 key={trial.id}
-                className={`trial-badge ${trial.processId === 'coin-flip' ? trial.result : `dice-${trial.result}`}`}
+                className={`trial-badge ${
+                  trial.processId === 'coin-flip' 
+                    ? trial.result 
+                    : trial.processId === 'dice-roll'
+                    ? `dice-${trial.result}`
+                    : 'sum-dice'
+                }`}
               >
-                #{trial.id}: {trial.processId === 'coin-flip' 
-                  ? (trial.result === 'heads' ? 'H' : 'T')
-                  : `⚀${trial.result}`
+                #{trial.id}: {
+                  trial.processId === 'coin-flip' 
+                    ? (trial.result === 'heads' ? 'H' : 'T')
+                    : trial.processId === 'dice-roll'
+                    ? `⚀${trial.result}`
+                    : `Σ${trial.result}`
                 }
               </span>
             ))}

@@ -7,6 +7,10 @@ COPY package*.json ./
 RUN npm install
 
 COPY . .
+
+# Run tests during build to catch issues early
+RUN npm test -- --watchAll=false --passWithNoTests
+
 RUN npm run build
 
 # Production stage

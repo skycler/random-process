@@ -6,7 +6,7 @@ This document describes in details the application to be built for illustrating 
 
 The application will simulate and visualize random processes, allowing users to observe how different parameters affect the behavior of these processes over time. The main features will include:
 
-- **Process Selection**: Users can choose from various types of random processes: flipping a coin, rolling a dice.
+- **Process Selection**: Users can choose from various types of random processes: flipping a coin, rolling a dice, sum of multiple dice (demonstrates Central Limit Theorem and normal distribution convergence).
 - **Parameter Adjustment**: Users can modify parameters such as the number of trials. The default is set to one, but users can add more trials as needed, keeping the already existing trials intact. Users will be able to reset parameters, resulting in the removal of all existing trials.
 - **Visualization**: The application will provide graphical representations of the random processes, including histograms, line charts, and scatter plots.
 - **Real-time Updates**: As users adjust parameters, the visualizations will update in real-time to reflect the changes.
@@ -18,7 +18,7 @@ The application will simulate and visualize random processes, allowing users to 
 - **Data Visualization**: Libraries such as D3.js or Chart.js will be used for rendering the visualizations.
 - **State Management**: Redux or Context API will be employed for managing application state.
 - **Build Tools**: Provide a ready-to-use containerized environment using Docker for easy deployment and testing.
-- **Testing**: Implement unit and integration tests using Jest and React Testing Library to ensure reliability.
+- **Testing**: Implement unit and integration tests using Jest and React Testing Library to ensure reliability. Make the tests run during the build process to catch issues early.
 - **Maintainability**: Code will be modular and well-documented to facilitate future enhancements and maintenance. Create abstractions where necessary to allow easy addition of new random processes in the future.
 
 ## User Interface

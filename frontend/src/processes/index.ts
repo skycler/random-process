@@ -1,6 +1,7 @@
 import { RandomProcess } from './types';
 import { CoinFlipProcess } from './CoinFlipProcess';
 import { DiceRollProcess } from './DiceRollProcess';
+import { SumDiceProcess } from './SumDiceProcess';
 
 // Registry of all available random processes
 // To add a new process, simply create a new class implementing RandomProcess
@@ -10,9 +11,11 @@ const processRegistry: Map<string, RandomProcess> = new Map();
 // Register built-in processes
 const coinFlip = new CoinFlipProcess();
 const diceRoll = new DiceRollProcess();
+const sumDice = new SumDiceProcess(5); // Default to 5 dice
 
 processRegistry.set(coinFlip.config.id, coinFlip);
 processRegistry.set(diceRoll.config.id, diceRoll);
+processRegistry.set(sumDice.config.id, sumDice);
 
 /**
  * Get a process by its ID
@@ -42,9 +45,18 @@ export function registerProcess(process: RandomProcess): void {
   processRegistry.set(process.config.id, process);
 }
 
+/**
+ * Get the SumDiceProcess instance (for configuring number of dice)
+ */
+export function getSumDiceProcess(): SumDiceProcess {
+  return sumDice;
+}
+
 // Re-export types
 export * from './types';
 export { CoinFlipProcess } from './CoinFlipProcess';
 export type { CoinResult } from './CoinFlipProcess';
 export { DiceRollProcess } from './DiceRollProcess';
 export type { DiceResult } from './DiceRollProcess';
+export { SumDiceProcess } from './SumDiceProcess';
+export type { SumDiceResult } from './SumDiceProcess';
