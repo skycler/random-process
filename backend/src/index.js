@@ -54,6 +54,34 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+/**
+ * Dice roll simulation endpoint
+ * POST /api/simulate/dice-roll
+ * Body: { count: number }
+ * Returns: { results: Array<1|2|3|4|5|6>, stats: { counts: number[], total: number } }
+ */
+app.post('/api/simulate/dice-roll', (req, res) => {
+  const { count = 1 } = req.body;
+  
+  if (count < 1 || count > 10000) {
+    return res.status(400).json({ error: 'Count must be between 1 and 10000' });
+  }
+  
+  const results = [];
+  const counts = [0, 0, 0, 0, 0, 0];
+  
+  for (let i = 0; i < count; i++) {
+    const result = Math.floor(Math.random() * 6) + 1;
+    results.push(result);
+    counts[result - 1]++;
+  }
+  
+  res.json({
+    results,
+    stats: { counts, total: count },
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

@@ -1,4 +1,5 @@
 import React from 'react';
+import { getProcessConfigs } from '../processes';
 import './ProcessSelector.css';
 
 interface ProcessSelectorProps {
@@ -10,10 +11,7 @@ const ProcessSelector: React.FC<ProcessSelectorProps> = ({
   selectedProcess,
   onProcessChange,
 }) => {
-  const processes = [
-    { id: 'coin-flip', name: 'Coin Flip' },
-    // More processes can be added here in the future
-  ];
+  const processes = getProcessConfigs();
 
   return (
     <div className="process-selector">

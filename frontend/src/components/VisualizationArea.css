@@ -98,3 +98,27 @@
   background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
   color: white;
 }
+
+.trial-badge.dice-1 { background: #00c9ff; color: #1a1a2e; }
+.trial-badge.dice-2 { background: #f5576c; color: white; }
+.trial-badge.dice-3 { background: #92fe9d; color: #1a1a2e; }
+.trial-badge.dice-4 { background: #f093fb; color: #1a1a2e; }
+.trial-badge.dice-5 { background: #4facfe; color: white; }
+.trial-badge.dice-6 { background: #ffd166; color: #1a1a2e; }
+
+.dice-stats {
+  flex-wrap: wrap;
+}
+
+.dice-stats .stat-card {
+  min-width: 80px;
+  padding: 15px 10px;
+}
+
+.dice-stats .stat-card .stat-value {
+  font-size: 1.5rem;
+}
+
+.dice-stats .stat-card .stat-label {
+  font-size: 0.8rem;
+}

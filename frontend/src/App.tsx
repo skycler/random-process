@@ -4,40 +4,50 @@ import ProcessSelector from './components/ProcessSelector';
 import ParameterControls from './components/ParameterControls';
 import VisualizationArea from './components/VisualizationArea';
 import Footer from './components/Footer';
+import { getProcess, TrialResult } from './processes';
 import './App.css';
-
-export interface Trial {
-  id: number;
-  result: 'heads' | 'tails';
-}
 
 function App() {
   const [processType, setProcessType] = useState<string>('coin-flip');
-  const [trials, setTrials] = useState<Trial[]>([]);
-  const [probability, setProbability] = useState<number>(0.5);
+  const [trials, setTrials] = useState<TrialResult[]>([]);
 
-  const flipCoin = useCallback(() => {
-    const result = Math.random() < probability ? 'heads' : 'tails';
-    const newTrial: Trial = {
+  const runTrial = useCallback(() => {
+    const process = getProcess(processType);
+    if (!process) return;
+
+    const result = process.runTrial();
+    const newTrial: TrialResult = {
       id: trials.length + 1,
+      processId: processType,
       result,
+      timestamp: Date.now(),
     };
     setTrials((prev) => [...prev, newTrial]);
-  }, [probability, trials.length]);
+  }, [processType, trials.length]);
 
   const addTrials = useCallback((count: number) => {
-    const newTrials: Trial[] = [];
+    const process = getProcess(processType);
+    if (!process) return;
+
+    const newTrials: TrialResult[] = [];
     for (let i = 0; i < count; i++) {
-      const result = Math.random() < probability ? 'heads' : 'tails';
+      const result = process.runTrial();
       newTrials.push({
         id: trials.length + i + 1,
+        processId: processType,
         result,
+        timestamp: Date.now(),
       });
     }
     setTrials((prev) => [...prev, ...newTrials]);
-  }, [probability, trials.length]);
+  }, [processType, trials.length]);
 
   const resetTrials = useCallback(() => {
+    setTrials([]);
+  }, []);
+
+  const handleProcessChange = useCallback((newProcess: string) => {
+    setProcessType(newProcess);
     setTrials([]);
   }, []);
 
@@ -48,18 +58,17 @@ function App() {
         <div className="controls-section">
           <ProcessSelector 
             selectedProcess={processType} 
-            onProcessChange={setProcessType} 
+            onProcessChange={handleProcessChange} 
           />
           <ParameterControls
-            probability={probability}
-            onProbabilityChange={setProbability}
-            onFlipCoin={flipCoin}
+            processType={processType as 'coin-flip' | 'dice-roll'}
+            onRunTrial={runTrial}
             onAddTrials={addTrials}
             onReset={resetTrials}
             trialCount={trials.length}
           />
         </div>
-        <VisualizationArea trials={trials} />
+        <VisualizationArea trials={trials} processType={processType} />
       </main>
       <Footer />
     </div>

@@ -2,18 +2,16 @@ import React, { useState } from 'react';
 import './ParameterControls.css';
 
 interface ParameterControlsProps {
-  probability: number;
-  onProbabilityChange: (probability: number) => void;
-  onFlipCoin: () => void;
+  processType: 'coin-flip' | 'dice-roll';
+  onRunTrial: () => void;
   onAddTrials: (count: number) => void;
   onReset: () => void;
   trialCount: number;
 }
 
 const ParameterControls: React.FC<ParameterControlsProps> = ({
-  probability,
-  onProbabilityChange,
-  onFlipCoin,
+  processType,
+  onRunTrial,
   onAddTrials,
   onReset,
   trialCount,
@@ -25,27 +23,12 @@ const ParameterControls: React.FC<ParameterControlsProps> = ({
       <h3>Controls</h3>
       
       <div className="control-group">
-        <label htmlFor="probability">
-          P(Heads): {(probability * 100).toFixed(0)}%
-        </label>
-        <input
-          type="range"
-          id="probability"
-          min="0"
-          max="1"
-          step="0.01"
-          value={probability}
-          onChange={(e) => onProbabilityChange(parseFloat(e.target.value))}
-        />
-      </div>
-
-      <div className="control-group">
         <label>Trials: {trialCount}</label>
       </div>
 
       <div className="button-group">
-        <button className="btn btn-primary" onClick={onFlipCoin}>
-          +1
+        <button className="btn btn-primary" onClick={onRunTrial}>
+          {processType === 'coin-flip' ? '+1 Flip' : '+1 Roll'}
         </button>
         
         <div className="bulk-controls">
