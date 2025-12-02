@@ -63,5 +63,15 @@ export const useDiceRollConfig = (trials: TrialResult[]): VisualizationConfig =>
       ),
     },
     showConvergence: stats.total > 0,
+    infoSection: {
+      className: 'dice-info',
+      content: (
+        <p>
+          <strong>Uniform Distribution:</strong> A fair die gives each face (1–6) an equal 
+          probability of <em>1/6 ≈ 16.67%</em>. The expected average value is 3.5. 
+          Watch the histogram flatten as more rolls accumulate!
+        </p>
+      ),
+    },
   }), [stats, convergenceData, trials]);
 };

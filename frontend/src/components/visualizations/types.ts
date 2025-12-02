@@ -27,10 +27,13 @@ export interface ConvergenceConfig {
 }
 
 /**
- * Optional info section (e.g., CLT explanation)
+ * Info section providing educational context about the random process.
+ * Displays insights about probability theory, expected behavior, or underlying mathematics.
  */
 export interface InfoSection {
+  /** The content to display (can be JSX with formatted text) */
   content: React.ReactNode;
+  /** Optional CSS class for styling */
   className?: string;
 }
 

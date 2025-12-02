@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { GeneratorType } from '../processes';
 import './ParameterControls.css';
 
 interface ParameterControlsProps {
@@ -9,6 +10,8 @@ interface ParameterControlsProps {
   trialCount: number;
   numberOfDice?: number;
   onNumberOfDiceChange?: (count: number) => void;
+  generatorType: GeneratorType;
+  onGeneratorChange: (type: GeneratorType) => void;
 }
 
 const ParameterControls: React.FC<ParameterControlsProps> = ({
@@ -19,6 +22,8 @@ const ParameterControls: React.FC<ParameterControlsProps> = ({
   trialCount,
   numberOfDice = 5,
   onNumberOfDiceChange,
+  generatorType,
+  onGeneratorChange,
 }) => {
   const [bulkCount, setBulkCount] = useState<number>(10);
 
@@ -85,6 +90,18 @@ const ParameterControls: React.FC<ParameterControlsProps> = ({
         <button className="btn btn-danger" onClick={onReset}>
           Reset
         </button>
+      </div>
+
+      <div className="control-group generator-group">
+        <label htmlFor="generator-select">Random Generator:</label>
+        <select
+          id="generator-select"
+          value={generatorType}
+          onChange={(e) => onGeneratorChange(e.target.value as GeneratorType)}
+        >
+          <option value="standard">Standard (Math.random)</option>
+          <option value="lattice">Lattice-based (LCG)</option>
+        </select>
       </div>
     </div>
   );

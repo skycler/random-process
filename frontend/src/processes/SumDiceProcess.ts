@@ -1,4 +1,4 @@
-import { RandomProcess, ProcessConfig } from './types';
+import { RandomProcess, ProcessConfig, GeneratorType, getRandomNumber } from './types';
 
 export type SumDiceResult = number;
 
@@ -16,6 +16,7 @@ export type SumDiceResult = number;
  */
 export class SumDiceProcess implements RandomProcess<SumDiceResult> {
   private numberOfDice: number;
+  private generator: GeneratorType = 'standard';
 
   config: ProcessConfig = {
     id: 'sum-dice',
@@ -25,6 +26,10 @@ export class SumDiceProcess implements RandomProcess<SumDiceResult> {
 
   constructor(numberOfDice: number = 5) {
     this.numberOfDice = numberOfDice;
+  }
+
+  setGenerator(type: GeneratorType): void {
+    this.generator = type;
   }
 
   setNumberOfDice(n: number): void {
@@ -38,7 +43,7 @@ export class SumDiceProcess implements RandomProcess<SumDiceResult> {
   runTrial(): SumDiceResult {
     let sum = 0;
     for (let i = 0; i < this.numberOfDice; i++) {
-      sum += Math.floor(Math.random() * 6) + 1;
+      sum += Math.floor(getRandomNumber(this.generator) * 6) + 1;
     }
     return sum;
   }

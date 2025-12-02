@@ -48,5 +48,15 @@ export const useCoinFlipConfig = (trials: TrialResult[]): VisualizationConfig =>
       ),
     },
     showConvergence: stats.total > 0,
+    infoSection: {
+      className: 'coin-info',
+      content: (
+        <p>
+          <strong>Law of Large Numbers:</strong> Each flip has a 50% chance of heads or tails. 
+          As you run more trials, the observed proportion <em>converges to 0.5</em>—demonstrating 
+          how randomness averages out over time.
+        </p>
+      ),
+    },
   }), [stats, convergenceData, trials]);
 };

@@ -1,4 +1,4 @@
-import { RandomProcess, ProcessConfig } from './types';
+import { RandomProcess, ProcessConfig, GeneratorType, getRandomNumber } from './types';
 
 export type CoinResult = 'heads' | 'tails';
 
@@ -9,8 +9,14 @@ export class CoinFlipProcess implements RandomProcess<CoinResult> {
     description: 'Simulate flipping a fair coin',
   };
 
+  private generator: GeneratorType = 'standard';
+
+  setGenerator(type: GeneratorType): void {
+    this.generator = type;
+  }
+
   runTrial(): CoinResult {
-    return Math.random() < 0.5 ? 'heads' : 'tails';
+    return getRandomNumber(this.generator) < 0.5 ? 'heads' : 'tails';
   }
 
   getOutcomes(): CoinResult[] {

@@ -25,7 +25,7 @@ The application will simulate and visualize random processes, allowing users to 
 The UI will consist of the following components:
 - **Header**: Title and brief description of the application. Color specs: very light colors, grayish.
 - **Process Selector**: Dropdown menu for selecting the type of random process. Add A catchy illustration related to the selected random process next to the title to make it less plain and technical.
-- **Parameter Controls**: Input fields and sliders for adjusting parameters. Keep it small, not to occupy much space. Color specs: very light colors, grayish.
+- **Parameter Controls**: Input fields and sliders for adjusting parameters. Keep it small, not to occupy much space. Choosing between different random generators (standard, lattice based pseudo-random). Color specs: very light colors, grayish.
 - **Visualization Area**: Section for displaying the graphical representations of the random processes. Color specs:
   - more vibrant colors to highlight the visualizations.
   - convergence plot and total trials label should NOT stick out too much.

@@ -1,4 +1,4 @@
-import { RandomProcess } from './types';
+import { RandomProcess, GeneratorType, resetLatticeGenerator } from './types';
 import { CoinFlipProcess } from './CoinFlipProcess';
 import { DiceRollProcess } from './DiceRollProcess';
 import { SumDiceProcess } from './SumDiceProcess';
@@ -53,6 +53,21 @@ export function registerProcess(process: RandomProcess): void {
  */
 export function getSumDiceProcess(): SumDiceProcess {
   return sumDice;
+}
+
+/**
+ * Set the random number generator type for all processes
+ */
+export function setGenerator(type: GeneratorType): void {
+  coinFlip.setGenerator(type);
+  diceRoll.setGenerator(type);
+  sumDice.setGenerator(type);
+  piSimulation.setGenerator(type);
+  
+  // Reset the lattice generator with a new seed when switching
+  if (type === 'lattice') {
+    resetLatticeGenerator();
+  }
 }
 
 // Re-export types

@@ -80,4 +80,21 @@ describe('App Component', () => {
     // Button should now show "+1 Roll"
     expect(screen.getByRole('button', { name: /\+1 Roll/i })).toBeInTheDocument();
   });
+
+  test('can switch random generator type', () => {
+    render(<App />);
+    const generatorSelector = screen.getByLabelText(/random generator/i) as HTMLSelectElement;
+    expect(generatorSelector.value).toBe('standard');
+    
+    fireEvent.change(generatorSelector, { target: { value: 'lattice' } });
+    expect(generatorSelector.value).toBe('lattice');
+  });
+
+  test('generator selector shows both options', () => {
+    render(<App />);
+    const generatorSelector = screen.getByLabelText(/random generator/i);
+    expect(generatorSelector).toBeInTheDocument();
+    expect(screen.getByText(/Standard/i)).toBeInTheDocument();
+    expect(screen.getByText(/Lattice-based/i)).toBeInTheDocument();
+  });
 });

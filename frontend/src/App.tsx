@@ -4,13 +4,19 @@ import ProcessSelector from './components/ProcessSelector';
 import ParameterControls from './components/ParameterControls';
 import VisualizationArea from './components/VisualizationArea';
 import Footer from './components/Footer';
-import { getProcess, getSumDiceProcess, TrialResult } from './processes';
+import { getProcess, getSumDiceProcess, setGenerator, TrialResult, GeneratorType } from './processes';
 import './App.css';
 
 function App() {
   const [processType, setProcessType] = useState<string>('coin-flip');
   const [trials, setTrials] = useState<TrialResult[]>([]);
   const [numberOfDice, setNumberOfDice] = useState<number>(5);
+  const [generatorType, setGeneratorType] = useState<GeneratorType>('standard');
+
+  const handleGeneratorChange = useCallback((type: GeneratorType) => {
+    setGeneratorType(type);
+    setGenerator(type);
+  }, []);
 
   const handleNumberOfDiceChange = useCallback((count: number) => {
     setNumberOfDice(count);
@@ -75,6 +81,8 @@ function App() {
             trialCount={trials.length}
             numberOfDice={numberOfDice}
             onNumberOfDiceChange={handleNumberOfDiceChange}
+            generatorType={generatorType}
+            onGeneratorChange={handleGeneratorChange}
           />
         </div>
         <VisualizationArea 

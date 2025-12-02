@@ -1,4 +1,4 @@
-import { RandomProcess, ProcessConfig } from './types';
+import { RandomProcess, ProcessConfig, GeneratorType, getRandomNumber } from './types';
 
 /**
  * Result of a single Pi simulation trial
@@ -17,6 +17,8 @@ export type PiSimulationResult = { x: number; y: number; inside: boolean };
  * Therefore: π ≈ 4 * (points inside circle / total points)
  */
 export class PiSimulationProcess implements RandomProcess<PiSimulationResult> {
+  private generator: GeneratorType = 'standard';
+
   config: ProcessConfig = {
     id: 'pi-simulation',
     name: 'π Simulation',
@@ -24,12 +26,16 @@ export class PiSimulationProcess implements RandomProcess<PiSimulationResult> {
     icon: '🎯',
   };
 
+  setGenerator(type: GeneratorType): void {
+    this.generator = type;
+  }
+
   /**
    * Generate a random point and determine if it falls inside the quarter circle
    */
   runTrial(): { x: number; y: number; inside: boolean } {
-    const x = Math.random();
-    const y = Math.random();
+    const x = getRandomNumber(this.generator);
+    const y = getRandomNumber(this.generator);
     // Point is inside the quarter circle if x² + y² ≤ 1
     const inside = (x * x + y * y) <= 1;
     return { x, y, inside };

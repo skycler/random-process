@@ -1,4 +1,4 @@
-import { RandomProcess, ProcessConfig } from './types';
+import { RandomProcess, ProcessConfig, GeneratorType, getRandomNumber } from './types';
 
 export type DiceResult = 1 | 2 | 3 | 4 | 5 | 6;
 
@@ -9,8 +9,14 @@ export class DiceRollProcess implements RandomProcess<DiceResult> {
     description: 'Simulate rolling a fair six-sided dice',
   };
 
+  private generator: GeneratorType = 'standard';
+
+  setGenerator(type: GeneratorType): void {
+    this.generator = type;
+  }
+
   runTrial(): DiceResult {
-    return (Math.floor(Math.random() * 6) + 1) as DiceResult;
+    return (Math.floor(getRandomNumber(this.generator) * 6) + 1) as DiceResult;
   }
 
   getOutcomes(): DiceResult[] {

@@ -111,3 +111,19 @@
 .btn-danger:hover {
   background-color: #ced4da;
 }
+
+.generator-group {
+  padding: 6px 10px;
+  background: #e9ecef;
+  border-radius: 6px;
+}
+
+.generator-group select {
+  padding: 4px 8px;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  background: #fff;
+  color: #495057;
+  cursor: pointer;
+}
