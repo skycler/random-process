@@ -47,11 +47,6 @@ describe('Process Registry', () => {
           description: 'A test process',
         },
         runTrial: () => 'test',
-        getOutcomes: () => ['test'],
-        getExpectedValue: () => 0.5,
-        getColors: () => ['#000'],
-        getBorderColors: () => ['#000'],
-        formatResult: (r) => r,
       };
 
       registerProcess(mockProcess);

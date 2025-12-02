@@ -6,7 +6,7 @@ This document describes in details the application to be built for illustrating 
 
 The application will simulate and visualize random processes, allowing users to observe how different parameters affect the behavior of these processes over time. The main features will include:
 
-- **Process Selection**: Users can choose from various types of random processes: flipping a coin, rolling a dice, sum of multiple dice (demonstrates Central Limit Theorem and normal distribution convergence).
+- **Process Selection**: Users can choose from various types of random processes: flipping a coin, rolling a dice, sum of multiple dice (demonstrates Central Limit Theorem and normal distribution convergence), simulating π (with Monte Carlo method).
 - **Parameter Adjustment**: Users can modify parameters such as the number of trials. The default is set to one, but users can add more trials as needed, keeping the already existing trials intact. Users will be able to reset parameters, resulting in the removal of all existing trials.
 - **Visualization**: The application will provide graphical representations of the random processes, including histograms, line charts, and scatter plots.
 - **Real-time Updates**: As users adjust parameters, the visualizations will update in real-time to reflect the changes.
@@ -38,4 +38,5 @@ The UI will consist of the following components:
   - Display the frequency distribution of outcomes as a bar chart for all random processes.
   - Make sure to bin the data appropriately for clarity and accuracy. Apply different binning strategies based on the process type, number of trials, observed range of outcomes.
 - **Line Charts**: Show the convergence of sample means or other statistics over the number of trials.
+- **Scatter Plots**: For the π simulation, display points inside and outside a quarter circle to visualize the Monte Carlo method.
 - **Statistical Summaries**: Display key statistics such as mean and standard deviation alongside the visualizations.

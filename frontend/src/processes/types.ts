@@ -2,23 +2,23 @@
 export interface ProcessConfig {
   id: string;
   name: string;
-  description: string;
+  description?: string;
+  icon?: string;
 }
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type TrialResultValue = string | number | Record<string, any>;
 
 export interface TrialResult {
   id: number;
   processId: string;
-  result: string | number;
+  result: TrialResultValue;
   timestamp: number;
 }
 
 // Abstract interface for random processes
-export interface RandomProcess<T extends string | number = string | number> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export interface RandomProcess<T = any> {
   config: ProcessConfig;
   runTrial(): T;
-  getOutcomes(): T[];
-  getExpectedValue(): number;
-  getColors(): string[];
-  getBorderColors(): string[];
-  formatResult(result: T): string;
 }

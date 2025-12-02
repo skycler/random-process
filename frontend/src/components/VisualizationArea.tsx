@@ -15,11 +15,12 @@ import {
   CoinFlipVisualization,
   DiceRollVisualization,
   SumDiceVisualization,
+  PiSimulationVisualization,
   RecentTrials,
 } from './visualizations';
 import './VisualizationArea.css';
 
-// Register Chart.js components
+// Register Chart.js components (including scatter support via PointElement + LinearScale)
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -61,6 +62,8 @@ const VisualizationArea: React.FC<VisualizationAreaProps> = ({
         return <DiceRollVisualization trials={filteredTrials} />;
       case 'sum-dice':
         return <SumDiceVisualization trials={filteredTrials} numberOfDice={numberOfDice} />;
+      case 'pi-simulation':
+        return <PiSimulationVisualization trials={filteredTrials} />;
       default:
         return null;
     }

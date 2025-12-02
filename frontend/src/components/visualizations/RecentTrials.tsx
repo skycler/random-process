@@ -19,6 +19,10 @@ export const RecentTrials: React.FC<RecentTrialsProps> = ({ trials }) => {
         return `⚀${trial.result}`;
       case 'sum-dice':
         return `Σ${trial.result}`;
+      case 'pi-simulation': {
+        const result = trial.result as { inside: boolean };
+        return result.inside ? '●' : '○';
+      }
       default:
         return String(trial.result);
     }
@@ -32,6 +36,10 @@ export const RecentTrials: React.FC<RecentTrialsProps> = ({ trials }) => {
         return `dice-${trial.result}`;
       case 'sum-dice':
         return 'sum-dice';
+      case 'pi-simulation': {
+        const result = trial.result as { inside: boolean };
+        return result.inside ? 'pi-inside' : 'pi-outside';
+      }
       default:
         return '';
     }
