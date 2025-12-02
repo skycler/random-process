@@ -114,6 +114,21 @@ describe('SumDiceProcess', () => {
     });
   });
 
+  describe('getBorderColors', () => {
+    test('returns array with correct length', () => {
+      const colors = process.getBorderColors();
+      const outcomes = process.getOutcomes();
+      expect(colors.length).toBe(outcomes.length);
+    });
+
+    test('returns valid HSL colors', () => {
+      const colors = process.getBorderColors();
+      colors.forEach(color => {
+        expect(color).toMatch(/^hsl\(\d+(\.\d+)?, \d+%, \d+%\)$/);
+      });
+    });
+  });
+
   describe('formatResult', () => {
     test('formats result correctly', () => {
       expect(process.formatResult(15)).toBe('Sum: 15');

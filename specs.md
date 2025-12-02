@@ -18,7 +18,7 @@ The application will simulate and visualize random processes, allowing users to 
 - **Data Visualization**: Libraries such as D3.js or Chart.js will be used for rendering the visualizations.
 - **State Management**: Redux or Context API will be employed for managing application state.
 - **Build Tools**: Provide a ready-to-use containerized environment using Docker for easy deployment and testing.
-- **Testing**: Implement unit and integration tests using Jest and React Testing Library to ensure reliability. Make the tests run during the build process to catch issues early.
+- **Testing**: Implement unit and integration tests using Jest and React Testing Library to ensure reliability. Make the tests run during the build process to catch issues early. Report test coverage and results in the build logs. Target 100% test coverage for the random process modules.
 - **Maintainability**: Code will be modular and well-documented to facilitate future enhancements and maintenance. Create abstractions where necessary to allow easy addition of new random processes in the future. Split the code into small, manageable components and modules, especially for the process simulations and visualizations.
 
 ## User Interface

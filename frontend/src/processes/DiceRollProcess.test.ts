@@ -55,6 +55,19 @@ describe('DiceRollProcess', () => {
     });
   });
 
+  describe('getBorderColors', () => {
+    it('should return six border colors', () => {
+      expect(process.getBorderColors()).toHaveLength(6);
+    });
+
+    it('should return valid hex colors', () => {
+      const colors = process.getBorderColors();
+      colors.forEach(color => {
+        expect(color).toMatch(/^#[0-9a-fA-F]{6}$/);
+      });
+    });
+  });
+
   describe('formatResult', () => {
     it('should format result with dice emoji', () => {
       expect(process.formatResult(1)).toBe('⚀1');

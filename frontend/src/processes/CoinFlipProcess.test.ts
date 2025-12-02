@@ -54,6 +54,19 @@ describe('CoinFlipProcess', () => {
     });
   });
 
+  describe('getBorderColors', () => {
+    it('should return two border colors', () => {
+      expect(process.getBorderColors()).toHaveLength(2);
+    });
+
+    it('should return valid hex colors', () => {
+      const colors = process.getBorderColors();
+      colors.forEach(color => {
+        expect(color).toMatch(/^#[0-9a-fA-F]{6}$/);
+      });
+    });
+  });
+
   describe('formatResult', () => {
     it('should format heads as H', () => {
       expect(process.formatResult('heads')).toBe('H');
