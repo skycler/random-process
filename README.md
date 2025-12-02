@@ -1,5 +1,9 @@
 # Random Process Illustration
 
+[![Deploy to GitHub Pages](https://github.com/skycler/random-process/actions/workflows/deploy.yml/badge.svg)](https://github.com/skycler/random-process/actions/workflows/deploy.yml)
+
+**[🎲 Live Demo](https://skycler.github.io/random-process/)**
+
 A web application for simulating and visualizing random processes, allowing users to observe how different parameters affect the behavior of these processes over time.
 
 ## Features
