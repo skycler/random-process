@@ -38,3 +38,17 @@ export const useCoinConvergence = (trials: TrialResult[]): number[] => {
     });
   }, [trials]);
 };
+
+/**
+ * Hook to calculate standard errors for coin flip proportion
+ * SE = sqrt(p * (1-p) / n) where p = 0.5 for fair coin
+ */
+export const useCoinStandardErrors = (trials: TrialResult[]): number[] => {
+  return useMemo(() => {
+    return trials.map((_, index) => {
+      const n = index + 1;
+      // For a fair coin, p = 0.5, so SE = sqrt(0.25 / n) = 0.5 / sqrt(n)
+      return 0.5 / Math.sqrt(n);
+    });
+  }, [trials]);
+};

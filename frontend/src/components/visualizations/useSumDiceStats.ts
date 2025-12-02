@@ -70,3 +70,17 @@ export const useSumDiceConvergence = (trials: TrialResult[]): number[] => {
     });
   }, [trials]);
 };
+
+/**
+ * Hook to calculate standard errors for sum of dice convergence
+ * SE = sqrt(variance / n) where variance for sum of n dice = n * 35/12
+ */
+export const useSumDiceStandardErrors = (trials: TrialResult[], numberOfDice: number): number[] => {
+  return useMemo(() => {
+    const variance = (numberOfDice * 35) / 12; // Variance of sum of n dice
+    return trials.map((_, index) => {
+      const n = index + 1;
+      return Math.sqrt(variance / n);
+    });
+  }, [trials, numberOfDice]);
+};

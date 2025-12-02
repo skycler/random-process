@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { TrialResult } from '../../processes';
 import { VisualizationConfig } from './types';
-import { useDiceStats, useDiceConvergence } from './useDiceStats';
+import { useDiceStats, useDiceConvergence, useDiceStandardErrors } from './useDiceStats';
 import { 
   createHistogramOptions, 
   createConvergenceDatasets, 
@@ -16,6 +16,7 @@ import {
 export const useDiceRollConfig = (trials: TrialResult[]): VisualizationConfig => {
   const stats = useDiceStats(trials);
   const convergenceData = useDiceConvergence(trials);
+  const standardErrors = useDiceStandardErrors(trials);
 
   return useMemo(() => ({
     stats: [
@@ -47,12 +48,13 @@ export const useDiceRollConfig = (trials: TrialResult[]): VisualizationConfig =>
     },
     convergence: {
       data: {
-        labels: trials.map((_, i) => i + 1),
         datasets: createConvergenceDatasets(
           convergenceData,
           3.5,
           'Average Roll',
-          'Expected (3.5)'
+          'Expected (3.5)',
+          '#8b5cf6',
+          standardErrors
         ),
       },
       options: createConvergenceOptions(
@@ -73,5 +75,5 @@ export const useDiceRollConfig = (trials: TrialResult[]): VisualizationConfig =>
         </p>
       ),
     },
-  }), [stats, convergenceData, trials]);
+  }), [stats, convergenceData, standardErrors, trials]);
 };

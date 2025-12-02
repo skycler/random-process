@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { TrialResult } from '../../processes';
 import { VisualizationConfig } from './types';
-import { useSumDiceStats, useSumDiceConvergence } from './useSumDiceStats';
+import { useSumDiceStats, useSumDiceConvergence, useSumDiceStandardErrors } from './useSumDiceStats';
 import { 
   createConvergenceDatasets, 
   createConvergenceOptions,
@@ -17,6 +17,7 @@ export const useSumDiceConfig = (
 ): VisualizationConfig => {
   const stats = useSumDiceStats(trials, numberOfDice);
   const convergenceData = useSumDiceConvergence(trials);
+  const standardErrors = useSumDiceStandardErrors(trials, numberOfDice);
 
   return useMemo(() => {
     // Generate labels for sum values
@@ -75,12 +76,13 @@ export const useSumDiceConfig = (
       },
       convergence: {
         data: {
-          labels: trials.map((_, i) => i + 1),
           datasets: createConvergenceDatasets(
             convergenceData,
             numberOfDice * 3.5,
             'Average Sum',
-            `Expected (${(numberOfDice * 3.5).toFixed(1)})`
+            `Expected (${(numberOfDice * 3.5).toFixed(1)})`,
+            '#8b5cf6',
+            standardErrors
           ),
         },
         options: createConvergenceOptions(
@@ -101,5 +103,5 @@ export const useSumDiceConfig = (
         ),
       },
     };
-  }, [stats, convergenceData, trials, numberOfDice]);
+  }, [stats, convergenceData, standardErrors, trials, numberOfDice]);
 };

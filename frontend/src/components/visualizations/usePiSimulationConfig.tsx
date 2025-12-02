@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { TrialResult } from '../../processes';
 import { VisualizationConfig } from './types';
-import { usePiStats, usePiConvergence } from './usePiStats';
+import { usePiStats, usePiConvergence, usePiStandardErrors } from './usePiStats';
 import { createConvergenceDatasets } from './chartUtils';
 
 /**
@@ -10,6 +10,7 @@ import { createConvergenceDatasets } from './chartUtils';
 export const usePiSimulationConfig = (trials: TrialResult[]): VisualizationConfig => {
   const stats = usePiStats(trials);
   const convergenceData = usePiConvergence(trials);
+  const standardErrors = usePiStandardErrors(trials);
 
   return useMemo(() => ({
     stats: [
@@ -68,12 +69,13 @@ export const usePiSimulationConfig = (trials: TrialResult[]): VisualizationConfi
     },
     convergence: {
       data: {
-        labels: trials.map((_, i) => i + 1),
         datasets: createConvergenceDatasets(
           convergenceData,
           Math.PI,
           'π Estimate',
-          `Actual π (${Math.PI.toFixed(4)})`
+          `Actual π (${Math.PI.toFixed(4)})`,
+          '#8b5cf6',
+          standardErrors
         ),
       },
       options: {
@@ -86,7 +88,18 @@ export const usePiSimulationConfig = (trials: TrialResult[]): VisualizationConfi
             title: { display: true, text: 'π Estimate' },
           },
           x: {
-            title: { display: true, text: 'Number of Points' },
+            type: 'logarithmic' as const,
+            title: { display: true, text: 'Number of Points (log scale)' },
+            min: 1,
+            ticks: {
+              callback: function(value) {
+                const v = Number(value);
+                if ([1, 10, 100, 1000, 10000].includes(v)) {
+                  return v.toString();
+                }
+                return '';
+              },
+            },
           },
         },
         plugins: {
@@ -106,5 +119,5 @@ export const usePiSimulationConfig = (trials: TrialResult[]): VisualizationConfi
         </p>
       ),
     },
-  }), [stats, convergenceData, trials]);
+  }), [stats, convergenceData, standardErrors, trials]);
 };

@@ -37,6 +37,6 @@ The UI will consist of the following components:
 - **Probability Charts**:
   - Display the frequency distribution of outcomes as a bar chart for all random processes.
   - Make sure to bin the data appropriately for clarity and accuracy. Apply different binning strategies based on the process type, number of trials, observed range of outcomes.
-- **Line Charts**: Show the convergence of sample means or other statistics over the number of trials.
+- **Line Charts**: Show the convergence of sample means or other statistics over the number of trials. Logarithmic scale for the x-axis (number of trials) to better visualize convergence behavior. Add the theoretical expected value line for reference and error bands if applicable.
 - **Scatter Plots**: For the π simulation, display points inside and outside a quarter circle to visualize the Monte Carlo method.
 - **Statistical Summaries**: Display key statistics such as mean and standard deviation alongside the visualizations.

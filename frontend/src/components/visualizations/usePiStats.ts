@@ -80,3 +80,22 @@ export const usePiScatterData = (trials: TrialResult[]) => {
     return { insidePoints, outsidePoints };
   }, [trials]);
 };
+
+/**
+ * Hook to calculate standard errors for π estimation convergence
+ * The π estimate is 4 * (inside/n), which is 4 * Bernoulli proportion
+ * SE of proportion = sqrt(p*(1-p)/n), so SE of π = 4 * sqrt(p*(1-p)/n)
+ */
+export const usePiStandardErrors = (trials: TrialResult[]): number[] => {
+  return useMemo(() => {
+    let insideCount = 0;
+    return trials.map((trial, index) => {
+      const result = trial.result as { inside: boolean };
+      if (result.inside) insideCount++;
+      const n = index + 1;
+      const p = insideCount / n; // Proportion inside
+      // SE of π = 4 * SE of proportion
+      return 4 * Math.sqrt((p * (1 - p)) / n);
+    });
+  }, [trials]);
+};

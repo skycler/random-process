@@ -18,7 +18,7 @@ export const createHistogramOptions = (title: string): ChartOptions<'bar'> => ({
 });
 
 /**
- * Default convergence line chart options
+ * Default convergence line chart options with logarithmic x-axis
  */
 export const createConvergenceOptions = (
   title: string,
@@ -35,7 +35,18 @@ export const createConvergenceOptions = (
       title: { display: true, text: yAxisLabel },
     },
     x: {
-      title: { display: true, text: 'Trial Number' },
+      type: 'logarithmic',
+      title: { display: true, text: 'Trial Number (log scale)' },
+      min: 1,
+      ticks: {
+        callback: function(value) {
+          const v = Number(value);
+          if ([1, 10, 100, 1000, 10000].includes(v)) {
+            return v.toString();
+          }
+          return '';
+        },
+      },
     },
   },
   plugins: {
@@ -73,29 +84,67 @@ export const generateGradientColors = (
 };
 
 /**
- * Create convergence dataset with expected value line
+ * Create convergence dataset with expected value line and error bands
+ * Uses {x, y} point format for logarithmic scale compatibility
  */
 export const createConvergenceDatasets = (
   data: number[],
   expectedValue: number,
   label: string,
   expectedLabel: string,
-  color = '#8b5cf6'
-) => [
-  {
-    label,
-    data,
-    borderColor: color,
-    backgroundColor: `${color}26`, // 15% opacity
-    fill: true,
-    tension: 0.1,
-  },
-  {
-    label: expectedLabel,
-    data: data.map(() => expectedValue),
-    borderColor: '#6b7280',
-    borderDash: [5, 5],
-    fill: false,
-    pointRadius: 0,
-  },
-];
+  color = '#8b5cf6',
+  standardErrors?: number[]
+) => {
+  // Convert to {x, y} format for logarithmic x-axis
+  const pointData = data.map((y, i) => ({ x: i + 1, y }));
+  const expectedData = data.map((_, i) => ({ x: i + 1, y: expectedValue }));
+  
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const datasets: any[] = [
+    {
+      label,
+      data: pointData,
+      borderColor: color,
+      backgroundColor: `${color}26`, // 15% opacity
+      fill: false,
+      tension: 0.1,
+      pointRadius: data.length > 100 ? 0 : 2,
+    },
+    {
+      label: expectedLabel,
+      data: expectedData,
+      borderColor: '#6b7280',
+      borderDash: [5, 5],
+      fill: false,
+      pointRadius: 0,
+    },
+  ];
+
+  // Add error bands if standard errors are provided
+  if (standardErrors && standardErrors.length > 0) {
+    const upperBand = data.map((y, i) => ({ x: i + 1, y: y + (standardErrors[i] || 0) }));
+    const lowerBand = data.map((y, i) => ({ x: i + 1, y: y - (standardErrors[i] || 0) }));
+
+    datasets.push({
+      label: 'Upper Error Band',
+      data: upperBand,
+      borderColor: `${color}40`,
+      backgroundColor: 'transparent',
+      borderDash: [2, 2],
+      fill: false,
+      pointRadius: 0,
+    });
+
+    datasets.push({
+      label: 'Lower Error Band',
+      data: lowerBand,
+      borderColor: `${color}40`,
+      backgroundColor: `${color}15`,
+      borderDash: [2, 2],
+      fill: '-1', // Fill to previous dataset (upper band)
+      pointRadius: 0,
+    });
+  }
+
+  return datasets;
+};

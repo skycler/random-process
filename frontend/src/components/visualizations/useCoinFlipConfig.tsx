@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { TrialResult } from '../../processes';
 import { VisualizationConfig } from './types';
-import { useCoinStats, useCoinConvergence } from './useCoinStats';
+import { useCoinStats, useCoinConvergence, useCoinStandardErrors } from './useCoinStats';
 import { createHistogramOptions, createConvergenceDatasets, createConvergenceOptions } from './chartUtils';
 
 /**
@@ -10,6 +10,7 @@ import { createHistogramOptions, createConvergenceDatasets, createConvergenceOpt
 export const useCoinFlipConfig = (trials: TrialResult[]): VisualizationConfig => {
   const stats = useCoinStats(trials);
   const convergenceData = useCoinConvergence(trials);
+  const standardErrors = useCoinStandardErrors(trials);
 
   return useMemo(() => ({
     stats: [
@@ -32,12 +33,13 @@ export const useCoinFlipConfig = (trials: TrialResult[]): VisualizationConfig =>
     },
     convergence: {
       data: {
-        labels: trials.map((_, i) => i + 1),
         datasets: createConvergenceDatasets(
           convergenceData,
           0.5,
           'Proportion of Heads',
-          'Expected (0.5)'
+          'Expected (0.5)',
+          '#8b5cf6',
+          standardErrors
         ),
       },
       options: createConvergenceOptions(
@@ -58,5 +60,5 @@ export const useCoinFlipConfig = (trials: TrialResult[]): VisualizationConfig =>
         </p>
       ),
     },
-  }), [stats, convergenceData, trials]);
+  }), [stats, convergenceData, standardErrors, trials]);
 };

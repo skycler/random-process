@@ -19,7 +19,7 @@ export { usePiSimulationConfig } from './usePiSimulationConfig';
 export * from './chartUtils';
 
 // Stats hooks
-export { useCoinStats, useCoinConvergence } from './useCoinStats';
-export { useDiceStats, useDiceConvergence } from './useDiceStats';
-export { useSumDiceStats, useSumDiceConvergence } from './useSumDiceStats';
-export { usePiStats, usePiConvergence, usePiScatterData } from './usePiStats';
+export { useCoinStats, useCoinConvergence, useCoinStandardErrors } from './useCoinStats';
+export { useDiceStats, useDiceConvergence, useDiceStandardErrors } from './useDiceStats';
+export { useSumDiceStats, useSumDiceConvergence, useSumDiceStandardErrors } from './useSumDiceStats';
+export { usePiStats, usePiConvergence, usePiScatterData, usePiStandardErrors } from './usePiStats';
