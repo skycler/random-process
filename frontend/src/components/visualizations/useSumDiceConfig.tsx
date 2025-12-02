@@ -103,5 +103,5 @@ export const useSumDiceConfig = (
         ),
       },
     };
-  }, [stats, convergenceData, standardErrors, trials, numberOfDice]);
+  }, [stats, convergenceData, standardErrors, numberOfDice]);
 };

@@ -60,5 +60,5 @@ export const useCoinFlipConfig = (trials: TrialResult[]): VisualizationConfig =>
         </p>
       ),
     },
-  }), [stats, convergenceData, standardErrors, trials]);
+  }), [stats, convergenceData, standardErrors]);
 };

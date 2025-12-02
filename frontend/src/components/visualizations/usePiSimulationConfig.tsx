@@ -119,5 +119,5 @@ export const usePiSimulationConfig = (trials: TrialResult[]): VisualizationConfi
         </p>
       ),
     },
-  }), [stats, convergenceData, standardErrors, trials]);
+  }), [stats, convergenceData, standardErrors]);
 };
